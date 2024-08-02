@@ -208,12 +208,50 @@ def main():
         # 6. Cost Trend Analysis
         st.header("Cost Trend Analysis")
         daily_cost = filtered_df.groupby(filtered_df['Start'].dt.date)['total_cost_pounds'].sum().cumsum()
-        st.line_chart(daily_cost)
 
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.plot(daily_cost.index, daily_cost.values)
+
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Cumulative Cost (£)")
+        ax.set_title("Cumulative Cost Over Time")
+
+        # Format y-axis ticks to show pound sign and comma separators
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'£{x:,.0f}'))
+
+        # Rotate x-axis labels for better readability
+        plt.xticks(rotation=45)
+
+        plt.tight_layout()
+        st.pyplot(fig)
+
+        
         # 7. Average Job Cost by Account
         st.header("Average Job Cost by Account")
         avg_job_cost = filtered_df.groupby('Account')['total_cost_pounds'].mean().sort_values(ascending=False)
-        st.bar_chart(avg_job_cost)
+
+        fig, ax = plt.subplots(figsize=(12, 6))
+        bars = ax.bar(avg_job_cost.index, avg_job_cost.values)
+
+        # Add value labels on top of each bar
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2., height,
+                    f'£{height:.2f}',
+                    ha='center', va='bottom')
+
+        ax.set_xlabel("Account")
+        ax.set_ylabel("Average Cost per Job (£)")
+        ax.set_title("Average Job Cost by Account")
+
+        # Format y-axis ticks to show pound sign and comma separators
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'£{x:,.2f}'))
+
+        # Rotate x-axis labels for better readability
+        plt.xticks(rotation=45, ha='right')
+
+        plt.tight_layout()
+        st.pyplot(fig)
 
         # 8. Job Concurrency
         st.header("Job Concurrency Over Time")
