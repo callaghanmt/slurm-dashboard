@@ -1,1 +1,1 @@
-# slurm-dashboard
+# SLURM Dashboard Streamlit App
