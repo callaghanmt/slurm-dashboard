@@ -103,12 +103,27 @@ def main():
         st.table(account_costs_df)
 
 
-        # 1. Account Usage Distribution
+       # 1. Account Usage Distribution
         st.header("Account Usage Distribution")
         account_usage = filtered_df.groupby('Account')['total_cost_pounds'].sum()
-        fig, ax = plt.subplots()
-        ax.pie(account_usage, labels=account_usage.index, autopct='%1.1f%%')
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        wedges, texts, autotexts = ax.pie(account_usage, 
+                                        autopct=lambda pct: f'{pct:.1f}%' if pct > 2 else '',
+                                        pctdistance=0.8, 
+                                        textprops={'color': "w"})
+
+        # Add a legend
+        ax.legend(wedges, account_usage.index,
+                title="Accounts",
+                loc="center left",
+                bbox_to_anchor=(1, 0, 0.5, 1))
+
         ax.set_title("Total Cost Distribution by Account")
+
+        # Adjust the layout to make room for the legend
+        plt.tight_layout()
+
         st.pyplot(fig)
 
         # 2. Top Users by Cost
