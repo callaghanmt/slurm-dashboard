@@ -156,13 +156,35 @@ def main():
 
         st.pyplot(fig)
 
-        # 3. Job Duration Distribution
-        st.header("Job Duration Distribution")
-        fig, ax = plt.subplots()
-        sns.histplot(filtered_df['duration'], bins=30, kde=True, ax=ax)
-        ax.set_xlabel("Job Duration (minutes)")
-        ax.set_title("Distribution of Job Durations")
+        # 3. User Activity Heatmap
+        st.header("User Activity Heatmap")
+
+        # Prepare data for heatmap
+        user_activity = filtered_df.groupby([filtered_df['Start'].dt.dayofweek, filtered_df['Start'].dt.hour])['User'].count().unstack()
+
+        # Create heatmap
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.heatmap(user_activity, cmap='YlOrRd', ax=ax)
+
+        # Set labels and title
+        ax.set_xlabel('Hour of Day')
+        ax.set_ylabel('Day of Week')
+        ax.set_title('User Activity Heatmap')
+
+        # Replace numeric labels with day names
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        ax.set_yticklabels(days)
+
+        # Add colorbar label
+        cbar = ax.collections[0].colorbar
+        cbar.set_label('Number of Jobs Started')
+
+        plt.tight_layout()
         st.pyplot(fig)
+
+        # Add caption
+        st.caption("This heatmap shows the distribution of job start times across days of the week and hours of the day. " 
+                "Darker colors indicate higher activity (more jobs started) during those time periods.")
 
         # 4. Account Activity Timeline
         st.header("Account Activity Timeline")
