@@ -23,7 +23,7 @@ matplotlib
 mdurl 
 mkl-fft 
 mkl-random 
-mkl-service==2.4.0
+mkl-service
 numexpr 
 numpy 
 packaging 
