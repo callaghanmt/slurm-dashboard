@@ -129,7 +129,32 @@ def main():
         # 2. Top Users by Cost
         st.header("Top Users by Cost")
         top_users = filtered_df.groupby('User')['total_cost_pounds'].sum().nlargest(10)
-        st.bar_chart(top_users)
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        bars = ax.bar(top_users.index, top_users.values)
+
+        # Add value labels on top of each bar
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2., height,
+                    f'£{height:.2f}',
+                    ha='center', va='bottom')
+
+        # Set labels and title
+        ax.set_xlabel('User')
+        ax.set_ylabel('Total Cost (£)')
+        ax.set_title('Top 10 Users by Cost')
+
+        # Rotate x-axis labels for better readability if needed
+        plt.xticks(rotation=45, ha='right')
+
+        # Add pound signs to y-axis ticks
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'£{x:,.0f}'))
+
+        # Adjust layout
+        plt.tight_layout()
+
+        st.pyplot(fig)
 
         # 3. Job Duration Distribution
         st.header("Job Duration Distribution")
