@@ -156,7 +156,26 @@ def main():
 
         st.pyplot(fig)
 
-        # 3. User Activity Heatmap
+        # 3. Job Duration Distribution
+        st.header("Job Duration Distribution")
+        fig, ax = plt.subplots()
+        sns.histplot(filtered_df['duration'], bins=30, kde=True, ax=ax)
+        ax.set_xlabel("Job Duration (minutes)")
+        ax.set_title("Distribution of Job Durations")
+        st.pyplot(fig)
+
+        # 4. Account Activity Timeline
+        st.header("Account Activity Timeline")
+        timeline_data = filtered_df.groupby(['Account', pd.Grouper(key='Start', freq='D')])['total_cost_pounds'].sum().unstack(level=0).fillna(0)
+        fig, ax = plt.subplots(figsize=(12, 6))
+        sns.heatmap(timeline_data, cmap='YlOrRd', ax=ax)
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Account")
+        ax.set_title("Account Activity Timeline (Total Cost)")
+        st.pyplot(fig)
+
+        # 5. User Activity Heatmap
+
         st.header("User Activity Heatmap")
 
         # Prepare data for heatmap
@@ -185,28 +204,6 @@ def main():
         # Add caption
         st.caption("This heatmap shows the distribution of job start times across days of the week and hours of the day. " 
                 "Darker colors indicate higher activity (more jobs started) during those time periods.")
-
-        # 4. Account Activity Timeline
-        st.header("Account Activity Timeline")
-        timeline_data = filtered_df.groupby(['Account', pd.Grouper(key='Start', freq='D')])['total_cost_pounds'].sum().unstack(level=0).fillna(0)
-        fig, ax = plt.subplots(figsize=(12, 6))
-        sns.heatmap(timeline_data, cmap='YlOrRd', ax=ax)
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Account")
-        ax.set_title("Account Activity Timeline (Total Cost)")
-        st.pyplot(fig)
-
-        # 5. User Activity Heatmap
-        st.header("User Activity Heatmap")
-        filtered_df.loc[:,'hour'] = filtered_df['Start'].dt.hour
-        filtered_df.loc[:,'day'] = filtered_df['Start'].dt.dayofweek
-        user_activity = filtered_df.groupby(['day', 'hour']).size().unstack()
-        fig, ax = plt.subplots(figsize=(12, 6))
-        sns.heatmap(user_activity, cmap='YlOrRd', ax=ax)
-        ax.set_xlabel("Hour of Day")
-        ax.set_ylabel("Day of Week")
-        ax.set_title("User Activity Heatmap")
-        st.pyplot(fig)
 
         # 6. Cost Trend Analysis
         st.header("Cost Trend Analysis")
