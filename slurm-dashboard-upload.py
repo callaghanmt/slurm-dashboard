@@ -51,7 +51,6 @@ def load_data(uploaded_file):
     return df
 
 # Main Streamlit app
-# Main Streamlit app
 def main():
     st.title("Slurm Accounting Dashboard")
 
@@ -103,7 +102,7 @@ def main():
         st.table(account_costs_df)
 
 
-       # 1. Account Usage Distribution
+        #1. Account Usage Distribution
         st.header("Account Usage Distribution")
         account_usage = filtered_df.groupby('Account')['total_cost_pounds'].sum()
 
@@ -175,11 +174,15 @@ def main():
         st.pyplot(fig)
 
         # 5. User Activity Heatmap
-
+        # 5. User Activity Heatmap
         st.header("User Activity Heatmap")
 
         # Prepare data for heatmap
         user_activity = filtered_df.groupby([filtered_df['Start'].dt.dayofweek, filtered_df['Start'].dt.hour])['User'].count().unstack()
+
+        # Reorder the index to always start with Sunday (6) and end with Saturday (5)
+        days_order = [6, 0, 1, 2, 3, 4, 5]
+        user_activity = user_activity.reindex(days_order).dropna(how='all')
 
         # Create heatmap
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -191,8 +194,9 @@ def main():
         ax.set_title('User Activity Heatmap')
 
         # Replace numeric labels with day names
-        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        ax.set_yticklabels(days)
+        days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        present_days = [days[i] for i in user_activity.index]
+        ax.set_yticklabels(present_days)
 
         # Add colorbar label
         cbar = ax.collections[0].colorbar
