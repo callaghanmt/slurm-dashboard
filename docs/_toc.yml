@@ -1,0 +1,24 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: introduction
+chapters:
+- file: installation
+- file: usage
+- file: features/data_upload
+  sections:
+  - file: features/date_range_selection
+  - file: features/job_statistics
+  - file: features/user_statistics
+  - file: features/activity_heatmap
+  - file: features/data_export
+- file: code_explanation/data_processing
+  sections:
+  - file: code_explanation/visualisation
+  - file: code_explanation/streamlit_interface
+- file: deployment/containerisation
+  sections:
+  - file: deployment/hosting
+- file: troubleshooting
+- file: future_improvements

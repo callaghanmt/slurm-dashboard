@@ -1,0 +1,32 @@
+# Book settings
+title: Slurm Dashboard Documentation
+author: Red Oal Consulting LLP
+copyright: "2024"
+logo: logo.png  # Add your logo file to the project directory
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: force
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/yourusername/slurm-dashboard-docs  # Replace with your repo URL
+  path_to_book: docs
+  branch: main  # Replace with your branch name
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+
+# Configure your Sphinx extensions
+sphinx:
+  config:
+    language: en_GB
